@@ -12,9 +12,13 @@ RUN apt-get update && apt-get install -y rsync && rm -rf /var/lib/apt/lists/*
 RUN apt-get update && apt-get install -y samba rsync supervisor
 
 #Copy all src files
+RUN mkdir -p /app/src/Python
+RUN mkdir -p /app/src/SambaSetup
 COPY src /app/src
 
 #Copy the etc files
+RUN mkdir -p /etc/supervisor/conf.d/
+RUN mkdir -p /etc/samba/
 COPY etc/supervisor/conf.d/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 COPY etc/samba/smb.conf /etc/samba/smb.conf
 
