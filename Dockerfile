@@ -6,6 +6,8 @@ WORKDIR /app
 
 # Install NiceGUI and its essential encryption dependencies for session management
 RUN pip install --no-cache-dir nicegui cryptography
+#install rsync
+RUN apt-get update && apt-get install -y rsync && rm -rf /var/lib/apt/lists/*
 
 #Copy application source code into the image (kind of important)
 COPY src/ /app/src/

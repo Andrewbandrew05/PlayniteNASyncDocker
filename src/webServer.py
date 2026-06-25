@@ -2,6 +2,14 @@ import os
 import json
 from nicegui import app, ui
 
+import sharedUtility
+
+# This makes the list "refreshable" so the UI updates when we change it
+@ui.refreshable
+def show_log():
+    for entry in sharedUtility.globalVars.sync_log:
+        ui.label(entry).classes('text-sm font-mono')
+
 def load_config():
     config_path = '/config/config.json'
     
@@ -98,4 +106,6 @@ def setup_routes():
             log_box.push('Initializing system diagnostics...')
             log_box.push('Checking /config/config.json bindings...')
             log_box.push('Ready for incoming synchronization requests.')
+        ui.label('Live Sync Progress').classes('text-2xl')
+        show_log()
 

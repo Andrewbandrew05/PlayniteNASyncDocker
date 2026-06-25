@@ -7,6 +7,11 @@ import webServer
 
 webServer.setup_routes()
 
+#import tcpServer.py
+import tcpServer
+
+app.on_startup(lambda: asyncio.create_task(tcpServer.run_tcp_server()))
+
 
 # -----------------------------------------------------------------------------
 # Execution
