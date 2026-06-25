@@ -4,6 +4,9 @@ FROM python:3.11-slim
 #this defines the work directory, leaving as app as its nice and concise and I believe it may be the industry standard for projects just getting started (also easy to change)
 WORKDIR /app
 
+# Install NiceGUI and its essential encryption dependencies for session management
+RUN pip install --no-cache-dir nicegui cryptography
+
 #Copy application source code into the image (kind of important)
 COPY src/ /app/src/
 
