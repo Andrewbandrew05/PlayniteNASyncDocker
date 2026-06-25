@@ -26,7 +26,8 @@ class MinimalWebserver(BaseHTTPRequestHandler):
 
 if __name__ == "__main__":
     config = load_config()
-    port = config.get("server_port", 8080)
+    #hard code the port
+    port = 8080
     server = HTTPServer(("0.0.0.0", port), MinimalWebserver)
     print(f"Starting webserver on port {port}...")
     try:

@@ -1,9 +1,18 @@
+#NOTE: DOCKER-COMPOSE.yml is ONLY USED FOR LAUNCHING ON NON UNRAID DEVICES! UNRAID HANDLES THE LAUNCHING BY JUST RUNNING A DOCKER RUN COMMAND
+
+
+#defines docker-compose version, I think this may not be needed but it def doesn't hurt
 version: '3.8'
 
+#define the services
 services:
-  playnite-sync-test:
+  #defines the service (main-python refers to this being the service that starts the main .py file that handles everything else)
+  main-python:
+    #tells docker to build from the Dockerfile in the current directory
     build: .
+    #define the port mapping (when launching on unraid remeber to set to 8081 to get around AMP)
     ports:
       - "8080:8080"
+    #maps the /config directory in the same directory as this docker-compose file to internal directory of /config
     volumes:
       - ./config:/config
