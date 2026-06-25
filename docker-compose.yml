@@ -16,3 +16,9 @@ services:
     #maps the /config directory in the same directory as this docker-compose file to internal directory of /config
     volumes:
       - ./config:/config
+
+networks:
+  default:
+    driver: bridge
+    driver_opts:
+      com.docker.network.driver.mtu: 9000
