@@ -8,9 +8,23 @@ WORKDIR /app
 RUN pip install --no-cache-dir nicegui cryptography
 #install rsync
 RUN apt-get update && apt-get install -y rsync && rm -rf /var/lib/apt/lists/*
+#install samba for the internal network share
+RUN apt-get update && apt-get install -y samba rsync supervisor
 
-#Copy application source code into the image (kind of important)
-COPY src/ /app/src/
+# Copy supervisor to right location
+COPY /src/Supervisor/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+
+#copy samba setup script to right place
+COPY /src/SambaSetup/setup_samba.sh /app/src/SambaSetup/setup_samba.sh
+
+#Copy Python code into app
+COPY src/Python /app/src/Python
+
+#copy actual samba conf file
+COPY /src/SambaSetup/smb.conf /etc/samba/smb.conf
+
+#make setup_samba.sh executable
+RUN chmod +x /app/src/SambaSetup/setup_samba.sh
 
 #lets Docker/Unraid know what port the server will be listening on I think
 #(web port)
@@ -18,5 +32,8 @@ EXPOSE 8080
 #(socket server port)
 EXPOSE 8081
 
+#samba ports
+EXPOSE 445 139 137/udp 138/udp
+
 # Run the script
-CMD ["python", "/app/src/main.py"]
+CMD ["/usr/bin/supervisord"]
