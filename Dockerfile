@@ -14,6 +14,9 @@ RUN apt-get update && apt-get install -y samba rsync supervisor
 #Copy all src files
 COPY src /app/src
 
+# Bundle default config so it can be seeded into the /config volume on first run
+COPY config/config.json /app/defaults/config.json
+
 #Copy the etc files
 COPY etc/supervisor/conf.d/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 COPY etc/samba/smb.conf /etc/samba/smb.conf

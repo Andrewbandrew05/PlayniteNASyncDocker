@@ -12,11 +12,15 @@ def show_log():
 
 def load_config():
     config_path = '/config/config.json'
-    
-    if os.path.exists(config_path):
-        with open(config_path, 'r') as f:
-            return json.load(f)
-    return
+    defaults_path = '/app/defaults/config.json'
+
+    if not os.path.exists(config_path):
+        os.makedirs('/config', exist_ok=True)
+        import shutil
+        shutil.copy2(defaults_path, config_path)
+
+    with open(config_path, 'r') as f:
+        return json.load(f)
 
 config = load_config()
 
