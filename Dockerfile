@@ -15,8 +15,8 @@ RUN apt-get update && apt-get install -y samba rsync supervisor
 COPY src /app/src
 
 #Copy the etc files
-COPY /etc/supervisor/conf.d/supervisord.conf /app/etc/supervisor/conf.d/supervisord.conf
-COPY /etc/samba/smb.conf /app/etc/samba/smb.conf
+COPY etc/supervisor/conf.d/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+COPY etc/samba/smb.conf /etc/samba/smb.conf
 
 #make setup_samba.sh executable
 RUN chmod +x /app/src/SambaSetup/setup_samba.sh
