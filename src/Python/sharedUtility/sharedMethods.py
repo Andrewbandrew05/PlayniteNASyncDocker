@@ -17,7 +17,22 @@ async def transferFolderWithRsync(folderLocation, desiredFolderLocation):
         stderr=asyncio.subprocess.PIPE
     )
 
-    
+    while True:
+        line = await process.stdout.readline()
+        if not line:
+            break
+        
+        # Decode and clean the output
+        output = line.decode().strip()
+        
+        # Example parsing: itemize-changes output starts with 'c' for changes
+        if output.startswith('>f'):
+            filename = output[11:] # Extract filename from the standard rsync format
+            globalVars.sync_log.append(filename)
+            
+            # TRIGGER YOUR OTHER TASKS HERE
+            # e.g., app.storage.user['last_file'] = filename
+            # or await notify_dashboard_that_file_finished(filename)
 
     # Wait for the process to finish
     return_code = await process.wait()
