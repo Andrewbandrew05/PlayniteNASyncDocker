@@ -11,17 +11,11 @@ RUN apt-get update && apt-get install -y rsync && rm -rf /var/lib/apt/lists/*
 #install samba for the internal network share
 RUN apt-get update && apt-get install -y samba rsync supervisor
 
-# Copy supervisor to right location
-COPY /src/Supervisor/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+#Copy all src files
+COPY src app/src
 
-#copy samba setup script to right place
-COPY /src/SambaSetup/setup_samba.sh /app/src/SambaSetup/setup_samba.sh
-
-#Copy Python code into app
-COPY src/Python /app/src/Python
-
-#copy actual samba conf file
-COPY /src/SambaSetup/smb.conf /etc/samba/smb.conf
+#Copy the etc files
+COPY etc etc/
 
 #make setup_samba.sh executable
 RUN chmod +x /app/src/SambaSetup/setup_samba.sh
