@@ -36,4 +36,4 @@ EXPOSE 8081
 EXPOSE 445 139 137/udp 138/udp
 
 # Run the script
-CMD ["/usr/bin/supervisord"]
+CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/supervisord.conf"]
