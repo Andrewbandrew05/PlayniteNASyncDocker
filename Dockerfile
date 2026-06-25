@@ -11,7 +11,10 @@ RUN pip install --no-cache-dir nicegui cryptography
 COPY src/ /app/src/
 
 #lets Docker/Unraid know what port the server will be listening on I think
+#(web port)
 EXPOSE 8080
+#(socket server port)
+EXPOSE 8081
 
 # Run the script
-CMD ["python", "/app/src/server.py"]
+CMD ["python", "/app/src/main.py"]
