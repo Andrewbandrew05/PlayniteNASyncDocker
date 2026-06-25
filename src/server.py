@@ -19,7 +19,7 @@ class MinimalWebserver(BaseHTTPRequestHandler):
         
         response = {
             "status": "online",
-            "message": "PlayniteNASync running from GitHub image.",
+            "message": "PlayniteNASync running from GitHub image. This is (hopefully) going to be way easier than the plugin!",
             "debug_enabled": config.get("debug_mode", False)
         }
         self.wfile.write(bytes(json.dumps(response), "utf-8"))
