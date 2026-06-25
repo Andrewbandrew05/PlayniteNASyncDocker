@@ -21,8 +21,8 @@ COPY config/config.json /app/defaults/config.json
 COPY etc/supervisor/conf.d/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 COPY etc/samba/smb.conf /etc/samba/smb.conf
 
-#make setup_samba.sh executable
-RUN chmod +x /app/src/SambaSetup/setup_samba.sh
+# Required by smbd at runtime
+RUN mkdir -p /var/lib/samba/private
 
 #lets Docker/Unraid know what port the server will be listening on I think
 #(web port)
