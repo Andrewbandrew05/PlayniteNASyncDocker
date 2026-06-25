@@ -3,10 +3,10 @@ name: Build and Publish Docker Image
 on:
   push:
     branches: [ "main" ]
+  workflow_dispatch: # Adds the manual trigger button to the UI
 
 env:
   REGISTRY: ghcr.io
-  # This dynamically uses your GitHub username/repo name in lowercase
   IMAGE_NAME: ${{ github.repository }}
 
 jobs:
@@ -20,18 +20,13 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      # Replaced the problematic javascript block with the official login action
       - name: Log in to the Container registry
-        uses: actions/github-script@v6
+        uses: docker/login-action@v3
         with:
-          script: |
-            const token = '${{ secrets.GITHUB_TOKEN }}';
-            const registry = '${{ env.REGISTRY }}';
-            core.info(`Logging into ${registry}...`);
-            // Run docker login behind the scenes safely
-            const exec = require('@actions/exec');
-            await exec.exec('docker', ['login', registry, '-u', '${{ github.actor }}', '--password-stdin'], {
-              input: Buffer.from(token)
-            });
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Extract metadata (tags, labels) for Docker
         id: meta
