@@ -1,0 +1,50 @@
+name: Build and Publish Docker Image
+
+on:
+  push:
+    branches: [ "main" ]
+
+env:
+  REGISTRY: ghcr.io
+  # This dynamically uses your GitHub username/repo name in lowercase
+  IMAGE_NAME: ${{ github.repository }}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Log in to the Container registry
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const token = '${{ secrets.GITHUB_TOKEN }}';
+            const registry = '${{ env.REGISTRY }}';
+            core.info(`Logging into ${registry}...`);
+            // Run docker login behind the scenes safely
+            const exec = require('@actions/exec');
+            await exec.exec('docker', ['login', registry, '-u', '${{ github.actor }}', '--password-stdin'], {
+              input: Buffer.from(token)
+            });
+
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: |
+            type=raw,value=latest
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
